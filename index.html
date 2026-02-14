@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Card for Cedric</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #ffebee 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px 10px;
+            gap: 30px;
+        }
+
+        /* ==================== VINYL MUSIC PLAYER ==================== */
+        .music-player-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .vinyl-player {
+            background: linear-gradient(135deg, #fffafa 0%, #e65d5d 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-align: center;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .player-title {
+            color: #4e1a14;
+            font-size: 0.9em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .vinyl-disk {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ca6f92, #701919 70%);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.05);
+            animation: spinVinyl 8s linear infinite;
+        }
+
+        @keyframes spinVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .vinyl-disk.paused {
+            animation: none;
+        }
+
+        .vinyl-grooves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle, transparent 20%, rgba(255, 255, 255, 0.03) 20.5%, rgba(255, 255, 255, 0.03) 40%, transparent 40.5%),
+                radial-gradient(circle, transparent 45%, rgba(255, 255, 255, 0.02) 45.5%, rgba(255, 255, 255, 0.02) 50%, transparent 50.5%);
+        }
+
+        .vinyl-center {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 35% 35%, #ffffff, #fdfdfd);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(255, 255, 255, 0.1);
+            z-index: 2;
+        }
+
+        .vinyl-center::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #1a1a1a, #000);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .player-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .song-title {
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .artist-name {
+            color: #bbb;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(192, 57, 43, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(192, 57, 43, 0.6);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-slider {
+            width: 100px;
+            height: 5px;
+            border-radius: 5px;
+            background: rgba(231, 76, 60, 0.3);
+            appearance: none;
+            -webkit-appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #dac1be;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #e74c3c;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .volume-label {
+            color: #bbb;
+            font-size: 1.2em;
+        }
+
+        /* ==================== FLOWERS ANIMATION - BEAUTIFUL BOUQUET ==================== */
+        .flowers-backdrop {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 999;
+            animation: fadeInBackdrop 0.4s ease-out forwards;
+        }
+
+        .flowers-backdrop.hidden {
+            animation: fadeOutBackdrop 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeInBackdrop {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOutBackdrop {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .flowers {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .flowers.hidden {
+            display: none;
+        }
+
+        .petal {
+            position: fixed;
+            font-size: 2em;
+            animation: fall linear forwards;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 1;
+                transform: rotate(0deg);
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .container {
+            max-width: 100%;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(192, 57, 43, 0.2);
+            padding: 25px 15px;
+            text-align: center;
+            animation: slideIn 0.8s ease-out 0.6s both;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: #c0392b;
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(192, 57, 43, 0.2);
+        }
+
+        .subtitle {
+            color: #e74c3c;
+            font-size: 1em;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        .decoration {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            font-size: 1.5em;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .image-box {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.15);
+            transform: transition all 0.3s ease;
+        }
+
+        .image-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(192, 57, 43, 0.2);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+        .center-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.15);
+        }
+
+        .message {
+            background: linear-gradient(135deg, #ffe0e6 0%, #fff0f5 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #c0392b;
+        }
+
+        .message p {
+            color: #c0392b;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .message p:last-child {
+            margin-bottom: 0;
+        }
+
+        .heart-button {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(192, 57, 43, 0.3);
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .heart-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(192, 57, 43, 0.5);
+        }
+
+        .heart-button:active {
+            transform: scale(0.98);
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #c0392b;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .vinyl-disk {
+                width: 150px;
+                height: 150px;
+            }
+
+            .vinyl-center {
+                width: 45px;
+                height: 45px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Vinyl Music Player -->
+    <div class="music-player-container">
+        <div class="vinyl-player">
+            <div class="player-title">♫ Now Playing ♫</div>
+            
+            <div class="vinyl-disk" id="vinylDisk">
+                <div class="vinyl-grooves"></div>
+                <div class="vinyl-center"></div>
+            </div>
+
+            <div class="player-display">
+                <div class="song-title" id="songTitle">Pag Ibig</div>
+                <div class="artist-name">Sponge Cola</div>
+            </div>
+
+            <audio id="backgroundMusic" loop>
+        <source src="Pag Ibig - Sponge Cola.mp3" type="audio/mpeg">
+    </audio>
+
+            <div class="player-controls">
+                <button class="play-btn" id="playBtn" onclick="toggleMusic()">▶</button>
+                <div class="volume-control">
+                    <span class="volume-label">🔊</span>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" onchange="setVolume()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="image-gallery">
+            <div class="image-box">
+                <img src="public/snoopy.jpg" alt="Snoopy heart">
+            </div>
+            <div class="image-box">
+                <img src="public/bouquet.jpg" alt="Chiikawa flower bouquet">
+            </div>
+        </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="header">
+            <h1>A Valentine's  Message</h1>
+            <p class="subtitle">Just a silly side project of mine</p>
+        </div>
+
+        <div class="decoration">
+            💕 🍎 💐 🍎 💕
+        </div>
+
+        <div class="message">
+
+            <h1>The Unreachable Orchard</h1>
+            <p>I’m tracing quiet outlines in the soft and open air,</p>
+            <p>Finding sweetness in a harvest that I do not need to share.</p>
+            <p>Like a crimson fruit that’s tethered to a high and steady bough,</p>
+            <p>I’ve learned to love the color without reaching for it now.</p><br>
+
+            <p>There is a magic in the distance, a light that stays its own,</p>
+            <p>A secret sort of garden that is better left alone.</p>
+            <p>I don’t need to hold the flame to know the spark is bright;</p>
+            <p>I’ll just keep the warmth of it within my peripheral sight.</p><br>
+
+            <p>Dear Cedric,</p>
+            <p>Happy Valentine's Day!</p>
+            <p>I'm still admiring you from afar but I really hope you're not feeling awkward whenever you catch me staring at you at the campus. That's the least thing I want to make you feel huhu. I'm sorry, I blame my near-sightedness for it though HAHAHAH. It takes me a few seconds to recognize someone's face.</p>
+            <p>But anyways, may class talaga kami last Thursday sa Engineering Department nung nakita mo kaming nakaupo sa lobby. PS: I'm not a stalker. I know this is so cringe but yeah HAHAHAHA first time ko gumawa nito. Dont worry about me though, next time platonic nalang mararamdaman ko towards you. Maybe I just really wanted to be your friend arghhh. Sorry in advance pag naging fc ako bigla sa socmed... yun ay kung okay lang sayo, of course.</p><br><br><br><br><br>
+            <p>Anyway, I hope you like this little surprise I made for you. Have a great Valentine's Day! :></p><br><br><br><br>
+            <p> SIX SEVENNNNNNN HAHAHAHAHAHAAH </p>
+
+
+            <p style="font-size: 1.1em; margin-top: 15px; color: #e74c3c;">
+                From,<br>
+                Jana
+            </p>
+        </div>
+
+        <button class="heart-button" onclick="triggerFlowerAnimation()">Click for a Surprise!</button>
+
+        <div class="footer">
+            Made with love on Valentine's Day 2026
+        </div>
+    </div>
+
+    <!-- Flowers Animation Container -->
+    <div class="flowers hidden" id="flowersContainer"></div>
+
+    <script>
+        let isPlaying = false;
+
+        // ==================== VINYL PLAYER ==================== 
+        function toggleMusic() {
+            const audio = document.getElementById('backgroundMusic');
+            const playBtn = document.getElementById('playBtn');
+            const vinylDisk = document.getElementById('vinylDisk');
+
+            if (isPlaying) {
+                audio.pause();
+                playBtn.textContent = '▶';
+                vinylDisk.classList.add('paused');
+                isPlaying = false;
+            } else {
+                audio.play();
+                playBtn.textContent = '⏸';
+                vinylDisk.classList.remove('paused');
+                isPlaying = true;
+            }
+        }
+
+        function setVolume() {
+            const audio = document.getElementById('backgroundMusic');
+            const volumeSlider = document.getElementById('volumeSlider');
+            audio.volume = volumeSlider.value / 100;
+        }
+
+        // Initialize volume on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('backgroundMusic');
+            const volumeSlider = document.getElementById('volumeSlider');
+            audio.volume = volumeSlider.value / 100;
+        });
+
+        // ==================== HEART SHOWER ANIMATION ==================== 
+        function triggerFlowerAnimation() {
+            const container = document.getElementById('flowersContainer');
+            
+            // Create backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'flowers-backdrop';
+            document.body.appendChild(backdrop);
+            
+            // Heart emojis
+            const hearts = ['❤️', '💕', '💖', '💗', '💝'];
+            
+            // Create 50 falling hearts
+            const duration = 4; // seconds
+            for (let i = 0; i < 100; i++) {
+                const heart = document.createElement('div');
+                const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
+                const randomLeft = Math.random() * 100;
+                const randomDelay = Math.random() * 0.5;
+                const randomDuration = 3 + Math.random() * 2;
+                
+                heart.className = 'petal';
+                heart.textContent = randomHeart;
+                heart.style.left = randomLeft + '%';
+                heart.style.animationDuration = randomDuration + 's';
+                heart.style.animationDelay = randomDelay + 's';
+                heart.style.fontSize = (1 + Math.random() * 1.5) + 'em';
+                heart.style.opacity = 0.5 + Math.random() * 0.5;
+                
+                container.appendChild(heart);
+            }
+            
+            container.classList.remove('hidden');
+            
+            // Remove hearts and backdrop after animation completes
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                container.innerHTML = '';
+                container.classList.add('hidden');
+                
+                // Remove backdrop from DOM after fade out
+                setTimeout(() => {
+                    backdrop.remove();
+                }, 400);
+            }, duration * 1000 + 500);
+        }
+    </script>
+</body>
+</html>
